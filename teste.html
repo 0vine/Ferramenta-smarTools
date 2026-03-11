@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Envio de SMS</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+    .container {
+      display: flex;
+      height: 100vh; /* ocupa a tela inteira */
+    }
+    .left, .right {
+      flex: 1; /* cada lado ocupa metade */
+      padding: 20px;
+    }
+    .left {
+      border-right: 2px solid #ccc; /* linha separadora */
+    }
+    .right {
+      background-color: #f9f9f9;
+      overflow-y: auto;
+    }
+    .conectado {
+      color: green;
+      font-weight: bold;
+    }
+    .sms-log {
+      border-bottom: 1px solid #ddd;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+    .sms-log strong {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Coluna esquerda -->
+    <div class="left">
+      <h2>Envio de SMS via BrasilSMS</h2>
+      
+      <!-- Número de destino -->
+      <label for="destinoInput">Número de destino:</label><br>
+      <input type="text" id="destinoInput" placeholder="Ex: 5511999999999"><br><br>
+
+      <!-- Texto da mensagem -->
+      <label for="mensagemInput">Mensagem:</label><br>
+      <textarea id="mensagemInput" rows="4" cols="40" placeholder="Digite sua mensagem aqui..."></textarea><br><br>
+
+      <!-- Botão de envio -->
+      <button onclick="enviar()">Enviar SMS</button>
+
+      <p id="status"></p>
+
+      <!-- Área de sessão -->
+      <div id="sessao" style="display:none;">
+        <p>Número conectado: <span id="numeroSessao"></span></p>
+        <p class="conectado">Status: Conectado</p>
+      </div>
+    </div>
+
+    <!-- Coluna direita -->
+    <div class="right" id="historico">
+      <h3>Histórico de SMS enviados</h3>
+      <!-- Os registros aparecerão aqui -->
+    </div>
+  </div>
+
+  <script>
+    async function enviar() {
+      const numeroDestino = document.getElementById("destinoInput").value;
+      const mensagem = document.getElementById("mensagemInput").value;
+
+      if (numeroDestino && mensagem) {
+        try {
+          const response = await fetch("https://api.brasilsms.com/sms/send", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAwLCJlbWFpbCI6InZpbmljaXVzLmNhdmFsY2FudGlAZ2VzdG9yYXNtYXJ0LmNvbS5iciIsInR5cGUiOiJ1c2VyIiwiaWF0IjoxNzczMjQxNDk2LCJleHAiOjE4NTk1NTUwOTZ9.MldajlRPCpedSUFhKdOWIjFwHjBqCAB18kfqjBtYaAo" // substitua pelo seu token JWT
+            },
+            body: JSON.stringify({
+              recipient: numeroDestino,
+              message: mensagem
+            })
+          });
+
+          const data = await response.json();
+          if (data.success) {
+            document.getElementById("status").innerText = 
+              "SMS enviado com sucesso para " + numeroDestino;
+
+            // Exibir sessão conectada
+            document.getElementById("numeroSessao").innerText = numeroDestino;
+            document.getElementById("sessao").style.display = "block";
+
+            // Adicionar ao histórico
+            const historico = document.getElementById("historico");
+            const log = document.createElement("div");
+            log.className = "sms-log";
+            log.innerHTML = `<strong>Destino:</strong> ${numeroDestino}
+                             <strong>Mensagem:</strong> ${mensagem}
+                             <span style="color:green;">✔ Enviado com sucesso</span>`;
+            historico.appendChild(log);
+          } else {
+            document.getElementById("status").innerText = 
+              "Erro ao enviar SMS: " + (data.message || "verifique sua conta");
+          }
+        } catch (error) {
+          document.getElementById("status").innerText = 
+            "Falha na requisição: " + error.message;
+        }
+      } else {
+        document.getElementById("status").innerText = 
+          "Preencha o número de destino e a mensagem.";
+      }
+    }
+  </script>
+</body>
+</html>
