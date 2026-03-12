@@ -1,40 +1,139 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
-  <title>Envio de SMS</title>
+  <title>SmarTools</title>
   <style>
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
+      font-family: 'Roboto', sans-serif;
     }
+
     .container {
       display: flex;
-      height: 100vh; /* ocupa a tela inteira */
+      height: 100vh;
+      /* ocupa a tela inteira */
     }
-    .left, .right {
-      flex: 1; /* cada lado ocupa metade */
-      padding: 20px;
-    }
+
     .left {
-      border-right: 2px solid #ccc; /* linha separadora */
+      flex: 1;
+      /* cada lado ocupa metade */
+      padding: 20px;
+      display: flex;
+      /* ativa flexbox */
+      flex-direction: column;
+      /* organiza em coluna */
+      justify-content: center;
+      /* centraliza verticalmente */
+      align-items: center;
+      /* centraliza horizontalmente */
     }
+
+    .left {
+      border-right: 2px solid #ccc;
+      /* linha separadora */
+    }
+
+    .left h2 {
+      text-align: center;
+      /* centraliza o texto */
+      margin: 0 auto;
+      /* remove margens extras e ajuda na centralização */
+    }
+
+    input {
+      border: 1px solid #ccc;
+      /* borda cinza */
+      border-radius: 6px;
+      /* arredonda as pontas */
+      padding: 8px 12px;
+      /* espaço interno */
+      outline: none;
+      /* remove o contorno padrão */
+      transition: all 0.3s ease;
+      /* transição suave para hover */
+    }
+
+    input:hover {
+      border-color: #999;
+      /* muda a cor da borda no hover */
+      box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
+      /* leve sombra ao passar o mouse */
+      background-color: #f9f9f9;
+    }
+
+    textarea {
+      border: 1px solid #ccc;
+      /* borda cinza */
+      border-radius: 6px;
+      /* arredonda as pontas */
+      padding: 10px;
+      /* espaço interno */
+      outline: none;
+      /* remove o contorno padrão */
+      resize: vertical;
+      /* permite redimensionar apenas na vertical */
+      transition: all 0.3s ease;
+      /* transição suave para hover */
+      font-family: inherit;
+      /* mantém a mesma fonte do site */
+    }
+
+    textarea:hover {
+      border-color: #999;
+      /* muda a cor da borda no hover */
+      box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
+      /* leve sombra ao passar o mouse */
+      background-color: #f9f9f9;
+      /* fundo levemente mais claro no hover */
+    }
+
     .right {
+      flex: 1;
       background-color: #f9f9f9;
       overflow-y: auto;
+      padding: 20px;
     }
+
+    .right h3 {
+      text-align: center;
+      /* centraliza o texto */
+      margin: 0 auto;
+      /* remove margens extras e ajuda na centralização */
+    }
+
     .conectado {
       color: green;
       font-weight: bold;
     }
+
     .sms-log {
-      border-bottom: 1px solid #ddd;
       padding: 10px;
       margin-bottom: 10px;
+      border-radius: 6px;
+      /* arredonda as pontas */
+      text-align: center;
+      /* centraliza o texto */
+      background-color: #fff;
+      /* fundo branco */
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+      /* sombra leve para destacar */
+
+      display: flex;
+      /* ativa flexbox */
+      flex-direction: row;
+      /* organiza na horizontal */
+      justify-content: center;
+      /* centraliza horizontalmente */
+      align-items: center;
+      /* centraliza verticalmente */
     }
+
     .sms-log strong {
       display: block;
     }
+
     .btn-clear {
       margin-top: 20px;
       background-color: #d9534f;
@@ -43,17 +142,77 @@
       padding: 10px 15px;
       cursor: pointer;
     }
+
     .btn-clear:hover {
-      background-color: #c9302c;
+      background-color: #bb4d4d;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border-radius: 6px;
     }
+
+    .btn-clear:hover {
+      background-color: #b93232;
+      /* verde mais vivo no hover */
+      transform: scale(1.05);
+      /* leve aumento ao passar o mouse */
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      /* sombra suave */
+    }
+
+    .btn-clear:active {
+      transform: scale(0.95);
+      /* efeito de clique */
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-send {
+      background-color: #0e8652;
+      /* verde escuro */
+      color: #000;
+      /* texto preto */
+      border: none;
+      /* remove borda padrão */
+      border-radius: 6px;
+      /* cantos arredondados */
+      padding: 10px 20px;
+      /* espaço interno */
+      font-size: 16px;
+      /* tamanho da fonte */
+      font-weight: bold;
+      /* texto em negrito */
+      cursor: pointer;
+      /* cursor de mão */
+      transition: all 0.3s ease;
+      /* transição suave */
+    }
+
+    .btn-send:hover {
+      background-color: #0d9c61;
+      /* verde mais vivo no hover */
+      transform: scale(1.05);
+      /* leve aumento ao passar o mouse */
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      /* sombra suave */
+    }
+
+    .btn-send:active {
+      transform: scale(0.95);
+      /* efeito de clique */
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    }
+
   </style>
 </head>
+
 <body>
   <div class="container">
     <!-- Coluna esquerda -->
     <div class="left">
-      <h2>Envio de SMS via BrasilSMS</h2>
-      
+      <h2>Envio de SMS</h2>
+
       <!-- Número de destino -->
       <label for="destinoInput">Número de destino:</label><br>
       <input type="text" id="destinoInput" placeholder="Ex: 5511999999999"><br><br>
@@ -63,7 +222,7 @@
       <textarea id="mensagemInput" rows="4" cols="40" placeholder="Digite sua mensagem aqui..."></textarea><br><br>
 
       <!-- Botão de envio -->
-      <button onclick="enviar()">Enviar SMS</button>
+      <button class="btn-send" onclick="enviar()">Enviar SMS</button>
 
       <p id="status"></p>
 
@@ -105,8 +264,9 @@
 
           const data = await response.json();
           if (data.success) {
-            document.getElementById("status").innerText = 
-              "SMS enviado com sucesso para " + numeroDestino;
+            const statusEl = document.getElementById("status");
+            // document.getElementById("status").innerText =
+            //   "SMS enviado com sucesso para " + numeroDestino;
 
             // Exibir sessão conectada
             document.getElementById("numeroSessao").innerText = numeroDestino;
@@ -116,20 +276,19 @@
             const historico = document.getElementById("historico");
             const log = document.createElement("div");
             log.className = "sms-log";
-            log.innerHTML = `<strong>Destino:</strong> ${numeroDestino}
-                             <strong>Mensagem:</strong> ${mensagem}
-                             <span style="color:green;">✔ Enviado com sucesso</span>`;
+            log.innerHTML = `<strong>Mensagem:</strong> ${mensagem}
+                             <span style="color:green;"> ✔</span>`;
             historico.appendChild(log);
           } else {
-            document.getElementById("status").innerText = 
+            document.getElementById("status").innerText =
               "Erro ao enviar SMS: " + (data.message || "verifique sua conta");
           }
         } catch (error) {
-          document.getElementById("status").innerText = 
+          document.getElementById("status").innerText =
             "Falha na requisição: " + error.message;
         }
       } else {
-        document.getElementById("status").innerText = 
+        document.getElementById("status").innerText =
           "Preencha o número de destino e a mensagem.";
       }
     }
@@ -148,4 +307,5 @@
     }
   </script>
 </body>
+
 </html>
