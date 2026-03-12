@@ -1,311 +1,151 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
   <meta charset="UTF-8">
   <title>SmarTools</title>
   <style>
-    body {
-      margin: 0;
-      font-family: 'Roboto', sans-serif;
+    body { margin:0; font-family:'Roboto',sans-serif; }
+    .container { display:flex; height:100vh; }
+    .left { flex:1; padding:20px; display:flex; flex-direction:column; justify-content:center; align-items:center; border-right:2px solid #ccc; }
+    .right { flex:1; background-color:#f9f9f9; overflow-y:auto; padding:20px; }
+    .sms-log { padding:10px; margin-bottom:10px; border-radius:6px; text-align:center; background-color:#fff; box-shadow:0 2px 6px rgba(0,0,0,0.15); }
+    .btn-send { background-color:#0e8652; color:#000; border:none; border-radius:6px; padding:10px 20px; font-size:16px; font-weight:bold; cursor:pointer; transition:all 0.3s ease; }
+    .btn-send:hover { background-color:#0d9c61; transform:scale(1.05); box-shadow:0 4px 10px rgba(0,0,0,0.2); }
+    .btn-clear { margin-top:20px; background-color:#d9534f; color:white; border:none; padding:10px 15px; cursor:pointer; border-radius:6px; }
+    .btn-clear:hover { background-color:#b93232; transform:scale(1.05); box-shadow:0 4px 10px rgba(0,0,0,0.2); }
+    input, textarea {
+      border:none;          
+      border-radius:10px;   
+      padding:10px;
+      outline:none;
+      font-family:inherit;
+      background-color:#f1f1f1;
     }
-
-    .container {
-      display: flex;
-      height: 100vh;
-      /* ocupa a tela inteira */
-    }
-
-    .left {
-      flex: 1;
-      /* cada lado ocupa metade */
-      padding: 20px;
-      display: flex;
-      /* ativa flexbox */
-      flex-direction: column;
-      /* organiza em coluna */
-      justify-content: center;
-      /* centraliza verticalmente */
-      align-items: center;
-      /* centraliza horizontalmente */
-    }
-
-    .left {
-      border-right: 2px solid #ccc;
-      /* linha separadora */
-    }
-
-    .left h2 {
-      text-align: center;
-      /* centraliza o texto */
-      margin: 0 auto;
-      /* remove margens extras e ajuda na centralização */
-    }
-
-    input {
-      border: 1px solid #ccc;
-      /* borda cinza */
-      border-radius: 6px;
-      /* arredonda as pontas */
-      padding: 8px 12px;
-      /* espaço interno */
-      outline: none;
-      /* remove o contorno padrão */
-      transition: all 0.3s ease;
-      /* transição suave para hover */
-    }
-
-    input:hover {
-      border-color: #999;
-      /* muda a cor da borda no hover */
-      box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
-      /* leve sombra ao passar o mouse */
-      background-color: #f9f9f9;
-    }
-
-    textarea {
-      border: 1px solid #ccc;
-      /* borda cinza */
-      border-radius: 6px;
-      /* arredonda as pontas */
-      padding: 10px;
-      /* espaço interno */
-      outline: none;
-      /* remove o contorno padrão */
-      resize: vertical;
-      /* permite redimensionar apenas na vertical */
-      transition: all 0.3s ease;
-      /* transição suave para hover */
-      font-family: inherit;
-      /* mantém a mesma fonte do site */
-    }
-
-    textarea:hover {
-      border-color: #999;
-      /* muda a cor da borda no hover */
-      box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
-      /* leve sombra ao passar o mouse */
-      background-color: #f9f9f9;
-      /* fundo levemente mais claro no hover */
-    }
-
-    .right {
-      flex: 1;
-      background-color: #f9f9f9;
-      overflow-y: auto;
-      padding: 20px;
-    }
-
-    .right h3 {
-      text-align: center;
-      /* centraliza o texto */
-      margin: 0 auto;
-      /* remove margens extras e ajuda na centralização */
-    }
-
-    .conectado {
-      color: green;
-      font-weight: bold;
-    }
-
-    .sms-log {
-      padding: 10px;
-      margin-bottom: 10px;
-      border-radius: 6px;
-      /* arredonda as pontas */
-      text-align: center;
-      /* centraliza o texto */
-      background-color: #fff;
-      /* fundo branco */
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-      /* sombra leve para destacar */
-
-      display: flex;
-      /* ativa flexbox */
-      flex-direction: row;
-      /* organiza na horizontal */
-      justify-content: center;
-      /* centraliza horizontalmente */
-      align-items: center;
-      /* centraliza verticalmente */
-    }
-
-    .sms-log strong {
-      display: block;
-    }
-
-    .btn-clear {
-      margin-top: 20px;
-      background-color: #d9534f;
-      color: white;
-      border: none;
-      padding: 10px 15px;
-      cursor: pointer;
-    }
-
-    .btn-clear:hover {
-      background-color: #bb4d4d;
-      border: none;
-      border-radius: 6px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      border-radius: 6px;
-    }
-
-    .btn-clear:hover {
-      background-color: #b93232;
-      /* verde mais vivo no hover */
-      transform: scale(1.05);
-      /* leve aumento ao passar o mouse */
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-      /* sombra suave */
-    }
-
-    .btn-clear:active {
-      transform: scale(0.95);
-      /* efeito de clique */
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-    }
-
-    .btn-send {
-      background-color: #0e8652;
-      /* verde escuro */
-      color: #000;
-      /* texto preto */
-      border: none;
-      /* remove borda padrão */
-      border-radius: 6px;
-      /* cantos arredondados */
-      padding: 10px 20px;
-      /* espaço interno */
-      font-size: 16px;
-      /* tamanho da fonte */
-      font-weight: bold;
-      /* texto em negrito */
-      cursor: pointer;
-      /* cursor de mão */
-      transition: all 0.3s ease;
-      /* transição suave */
-    }
-
-    .btn-send:hover {
-      background-color: #0d9c61;
-      /* verde mais vivo no hover */
-      transform: scale(1.05);
-      /* leve aumento ao passar o mouse */
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-      /* sombra suave */
-    }
-
-    .btn-send:active {
-      transform: scale(0.95);
-      /* efeito de clique */
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-    }
-
+    textarea { resize:vertical; }
   </style>
 </head>
-
 <body>
   <div class="container">
-    <!-- Coluna esquerda -->
     <div class="left">
       <h2>Envio de SMS</h2>
 
-      <!-- Número de destino -->
       <label for="destinoInput">Número de destino:</label><br>
       <input type="text" id="destinoInput" placeholder="Ex: 5511999999999"><br><br>
 
-      <!-- Texto da mensagem -->
       <label for="mensagemInput">Mensagem:</label><br>
       <textarea id="mensagemInput" rows="4" cols="40" placeholder="Digite sua mensagem aqui..."></textarea><br><br>
 
-      <!-- Botão de envio -->
       <button class="btn-send" onclick="enviar()">Enviar SMS</button>
 
-      <p id="status"></p>
+      <!-- Sessão limpa, sem número conectado, status ou ID -->
+      <div id="sessao" style="display:none;"></div>
 
-      <!-- Área de sessão -->
-      <div id="sessao" style="display:none;">
-        <p>Número conectado: <span id="numeroSessao"></span></p>
-        <p class="conectado">Status: Conectado</p>
-      </div>
-
-      <!-- Botão para limpar -->
       <button class="btn-clear" onclick="novoEnvio()">Novo envio</button>
     </div>
 
-    <!-- Coluna direita -->
     <div class="right" id="historico">
       <h3>Histórico de SMS enviados</h3>
-      <!-- Os registros aparecerão aqui -->
     </div>
   </div>
 
   <script>
+    let ultimoIdMensagem = null;
+
     async function enviar() {
       const numeroDestino = document.getElementById("destinoInput").value;
       const mensagem = document.getElementById("mensagemInput").value;
 
       if (numeroDestino && mensagem) {
         try {
-          const response = await fetch("https://api.brasilsms.com/sms/send", {
+          const response = await fetch("https://api.smsdev.com.br/v1/send", {
             method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAwLCJlbWFpbCI6InZpbmljaXVzLmNhdmFsY2FudGlAZ2VzdG9yYXNtYXJ0LmNvbS5iciIsInR5cGUiOiJ1c2VyIiwiaWF0IjoxNzczMjQxNDk2LCJleHAiOjE4NTk1NTUwOTZ9.MldajlRPCpedSUFhKdOWIjFwHjBqCAB18kfqjBtYaAo" // substitua pelo seu token JWT
-            },
-            body: JSON.stringify({
-              recipient: numeroDestino,
-              message: mensagem
-            })
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify([
+              {
+                key: "JRWWCRDJ1MUIL53J2XP21ZL0MCYVDMPKYMHY4S6J9J8Y18Q9I5E9PDE53URPE2309CGQXA3CHY037B94IC43Z4Q2H8OJVAJJWPPZITL03FCXOOAM7WTD6T3QL49TLNVD",   // seu token da SMS Dev
+                type: 9,                 // tipo de envio (9 = SMS MT)
+                number: numeroDestino,   // número de destino
+                msg: mensagem            // texto da mensagem
+              }
+            ])
           });
 
           const data = await response.json();
-          if (data.success) {
-            const statusEl = document.getElementById("status");
-            // document.getElementById("status").innerText =
-            //   "SMS enviado com sucesso para " + numeroDestino;
 
-            // Exibir sessão conectada
-            document.getElementById("numeroSessao").innerText = numeroDestino;
-            document.getElementById("sessao").style.display = "block";
+          if (Array.isArray(data) && data.length > 0 && data[0].situacao === "OK") {
+            ultimoIdMensagem = data[0].id;
 
-            // Adicionar ao histórico
             const historico = document.getElementById("historico");
             const log = document.createElement("div");
             log.className = "sms-log";
-            log.innerHTML = `<strong>Mensagem:</strong> ${mensagem}
-                             <span style="color:green;"> ✔</span>`;
+            log.id = "log-" + ultimoIdMensagem;
+
+            const agora = new Date().toLocaleString("pt-BR");
+            log.innerHTML = `<strong>Mensagem:</strong> ${mensagem}<br>
+                             <strong>Número:</strong> ${numeroDestino}<br>
+                             <strong>Data/Hora:</strong> ${agora}<br>`;
             historico.appendChild(log);
+
+            setTimeout(() => verificarStatus(ultimoIdMensagem), 5000);
           } else {
-            document.getElementById("status").innerText =
-              "Erro ao enviar SMS: " + (data.message || "verifique sua conta");
+            adicionarLog("Erro ao enviar SMS: " + (data[0]?.descricao || "verifique sua conta"));
           }
         } catch (error) {
-          document.getElementById("status").innerText =
-            "Falha na requisição: " + error.message;
+          adicionarLog("Falha na requisição: " + error.message);
         }
       } else {
-        document.getElementById("status").innerText =
-          "Preencha o número de destino e a mensagem.";
+        adicionarLog("Preencha o número de destino e a mensagem.");
       }
     }
 
-    function novoEnvio() {
-      // Limpar histórico
-      document.getElementById("historico").innerHTML = "<h3>Histórico de SMS enviados</h3>";
+    async function verificarStatus(idMensagem) {
+      try {
+        const response = await fetch(`https://api.smsdev.com.br/v1/report/${idMensagem}`, {
+          method: "GET",
+          headers: { "Authorization": "Bearer JRWWCRDJ1MUIL53J2XP21ZL0MCYVDMPKYMHY4S6J9J8Y18Q9I5E9PDE53URPE2309CGQXA3CHY037B94IC43Z4Q2H8OJVAJJWPPZITL03FCXOOAM7WTD6T3QL49TLNVD" }
+        });
 
-      // Limpar inputs
+        const text = await response.text();
+        let data;
+        try {
+          data = JSON.parse(text);
+        } catch (e) {
+          const log = document.getElementById("log-" + idMensagem);
+          log.innerHTML += `<br><strong>Relatório:</strong> Resposta inválida da API (${text.substring(0,50)}...)`;
+          return;
+        }
+
+        if (Array.isArray(data) && data.length > 0) {
+          const resultado = data[0];
+          const log = document.getElementById("log-" + idMensagem);
+
+          if (resultado.situacao === "OK") {
+            log.innerHTML += `<br><strong>Relatório:</strong> <span style="color:green;">✔ Entregue</span>`;
+          } else {
+            log.innerHTML += `<br><strong>Relatório:</strong> <span style="color:red;">✖ Rejeitado - ${resultado.descricao}</span>`;
+          }
+        }
+      } catch (error) {
+        const log = document.getElementById("log-" + idMensagem);
+        log.innerHTML += `<br><strong>Relatório:</strong> Erro ao consultar status (${error.message})`;
+      }
+    }
+
+    function adicionarLog(texto) {
+      const historico = document.getElementById("historico");
+      const log = document.createElement("div");
+      log.className = "sms-log";
+      log.innerHTML = `<strong>${texto}</strong>`;
+      historico.appendChild(log);
+    }
+
+    function novoEnvio() {
+      document.getElementById("historico").innerHTML = "<h3>Histórico de SMS enviados</h3>";
       document.getElementById("destinoInput").value = "";
       document.getElementById("mensagemInput").value = "";
-
-      // Resetar status e sessão
-      document.getElementById("status").innerText = "";
       document.getElementById("sessao").style.display = "none";
+      ultimoIdMensagem = null;
     }
   </script>
 </body>
-
 </html>
