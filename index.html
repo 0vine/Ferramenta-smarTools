@@ -263,59 +263,59 @@
     let ultimoIdMensagem = null;
 
     async function enviar() {
-      const numeroDestino = document.getElementById("destinoInput").value;
-      const mensagem = document.getElementById("mensagemInput").value;
+    const numeroDestino = document.getElementById("destinoInput").value.trim();
+    const mensagem = document.getElementById("mensagemInput").value.trim();
 
-      if (numeroDestino && mensagem) {
-        try {
-          const response = await fetch("https://api.brasilsms.com/sms/send", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              "Authorization": "Bearer SEU_TOKEN_AQUI" // substituir pelo token real
-            },
-            body: JSON.stringify({
-              to: numeroDestino,
-              message: mensagem
-            })
-          });
+    if (numeroDestino && mensagem) {
+      try {
+        const response = await fetch("https://api.brasilsms.com/sms/send", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAwLCJlbWFpbCI6InZpbmljaXVzLmNhdmFsY2FudGlAZ2VzdG9yYXNtYXJ0LmNvbS5iciIsInR5cGUiOiJ1c2VyIiwiaWF0IjoxNzczMjQxNDk2LCJleHAiOjE4NTk1NTUwOTZ9.MldajlRPCpedSUFhKdOWIjFwHjBqCAB18kfqjBtYaAo"
+          },
+          body: JSON.stringify({
+            recipient: numeroDestino,
+            message: mensagem
+          })
+        });
 
-          const data = await response.json();
+        const data = await response.json();
 
-          if (response.ok) {
-            ultimoIdMensagem = data.id;
-            adicionarLog(`Número: ${data.to} | Mensagem: ${data.message}`, ultimoIdMensagem);
-            setTimeout(() => verificarStatus(ultimoIdMensagem), 3000);
-          } else {
-            // Exibir detalhe completo do erro retornado pela API
-            adicionarLog(`Erro ao enviar SMS: ${JSON.stringify(data)}`);
-          }
-        } catch (error) {
-          adicionarLog("Falha na requisição: " + error.message);
+        if (response.ok) {
+          ultimoIdMensagem = data.id;
+          // Mostra no log o número e a mensagem enviados
+          adicionarLog(numeroDestino, mensagem, ultimoIdMensagem);
+        } else {
+          adicionarLog("Erro", JSON.stringify(data));
         }
-      } else {
-        adicionarLog("Preencha o número de destino e a mensagem.");
+      } catch (error) {
+        adicionarLog("Erro", "Falha na requisição: " + error.message);
       }
+    } else {
+      adicionarLog("Erro", "Preencha o número de destino e a mensagem.");
     }
+  }
 
-    function adicionarLog(texto, idMensagem = null) {
-      const historico = document.getElementById("historico");
-      const log = document.createElement("div");
-      log.className = "sms-log";
-      if (idMensagem) log.id = "log-" + idMensagem;
+  // função recebe número e mensagem
+  function adicionarLog(numero, mensagem, idMensagem = null) {
+    const historico = document.getElementById("historico");
+    const log = document.createElement("div");
+    log.className = "sms-log";
+    if (idMensagem) log.id = "log-" + idMensagem;
 
-      const agora = new Date().toLocaleTimeString("pt-BR", { hour: '2-digit', minute: '2-digit' });
-      log.innerHTML = `<strong>${texto}</strong><span class="sms-time">Enviado às ${agora}</span>`;
-      historico.appendChild(log);
-    }
+    const agora = new Date().toLocaleTimeString("pt-BR", { hour: '2-digit', minute: '2-digit' });
+    log.innerHTML = `<strong>Número: ${numero} | Mensagem: ${mensagem}</strong><span class="sms-time">Enviado às ${agora}</span>`;
+    historico.appendChild(log);
+  }
 
-    function novoEnvio() {
-      document.getElementById("historico").innerHTML = "<h3>Histórico de SMS enviados</h3>";
-      document.getElementById("destinoInput").value = "";
-      document.getElementById("mensagemInput").value = "";
-      document.getElementById("sessao").style.display = "none";
-      ultimoIdMensagem = null;
-    }
+  function novoEnvio() {
+    document.getElementById("historico").innerHTML = "<h3>Histórico de SMS enviados</h3>";
+    document.getElementById("destinoInput").value = "";
+    document.getElementById("mensagemInput").value = "";
+    document.getElementById("sessao").style.display = "none";
+    ultimoIdMensagem = null;
+  }
 
     // Funções do pop-up
     function abrirPopup() {
