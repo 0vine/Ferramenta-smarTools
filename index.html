@@ -359,6 +359,12 @@
       }
     }
 
+    document.getElementById("destinoInput").addEventListener("focus", function() {
+  if (!this.value.startsWith("+")) {
+    this.value = "+" + this.value;
+  }
+});
+
 
   </script>
 </body>
