@@ -20,3 +20,34 @@ Envio de SMS (sendSMS)
 Responsável por enviar comandos de configuração diretamente para o número do rastreador.
 
 Exemplo de uso: enviar parâmetros como servidor, porta, APN, usuário e senha.
+
+Diagrama -
+
+Usuário (navegador)
+   │
+   │ Digita número + mensagem
+   ▼
+Front-end (HTML/JS)
+   │
+   │ POST /send-sms
+   ▼
+Backend (Express + Twilio)
+   │
+   │ Envia SMS via Twilio API
+   │ Define statusCallback → /sms-status
+   ▼
+Twilio (provedor de SMS)
+   │
+   │ Entrega SMS ao destinatário
+   │ Notifica status (queued, sent, delivered, failed)
+   ▼
+Webhook /sms-status (Backend)
+   │
+   │ Recebe atualização da Twilio
+   │ Emite evento via Socket.IO
+   ▼
+Front-end (Socket.IO)
+   │
+   │ Atualiza histórico em tempo real
+   ▼
+Usuário vê status atualizado (pontinho colorido)
