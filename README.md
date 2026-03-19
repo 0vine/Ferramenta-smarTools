@@ -18,7 +18,7 @@ Socket.IO (cliente) → comunicação em tempo real com o servidor para atualiza
 Fetch API → envio de requisições HTTP para o backend (POST /send-sms).
 
 
-
+--
 
 ⚙️ Back-end
 Node.js → ambiente de execução.
