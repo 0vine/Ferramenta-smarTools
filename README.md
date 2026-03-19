@@ -4,6 +4,7 @@
 Esta aplicação foi desenvolvida para auxiliar na configuração de rastreadores M2M via SMS.
 Através do envio de comandos específicos, o rastreador é configurado e integrado à plataforma desejada pelo cliente, simplificando o processo de ativação e gerenciamento.
 
+
 --
 🎨 Front-end
 HTML5 → estrutura da página.
@@ -15,6 +16,9 @@ JavaScript (Vanilla JS) → lógica da aplicação (envio de SMS, manipulação 
 Socket.IO (cliente) → comunicação em tempo real com o servidor para atualizar status dos SMS.
 
 Fetch API → envio de requisições HTTP para o backend (POST /send-sms).
+
+
+
 
 ⚙️ Back-end
 Node.js → ambiente de execução.
