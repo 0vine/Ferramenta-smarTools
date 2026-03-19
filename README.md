@@ -1,38 +1,53 @@
-📡 Ferramenta de Configuração de Rastreadores M2M via SMS
+# 📱 SmarTools - Envio de SMS com Twilio
 
-📝 Descrição
-Esta aplicação foi desenvolvida para auxiliar na configuração de rastreadores M2M via SMS.
-Através do envio de comandos específicos, o rastreador é configurado e integrado à plataforma desejada pelo cliente, simplificando o processo de ativação e gerenciamento.
+Aplicação web para envio de SMS com acompanhamento de status em tempo real.  
+O projeto combina **front-end em HTML/CSS/JS** com **back-end em Node.js/Express** integrado ao serviço **Twilio**.
+
+---
+
+## 🚀 Funcionalidades
+- Tela inicial com **loading animado**.
+- Formulário para envio de SMS (número de destino + mensagem).
+- Histórico de mensagens enviadas com **indicadores visuais de status**:
+  - 🟡 queued  
+  - 🔵 sent  
+  - 🟢 delivered  
+  - 🔴 failed/undelivered
+- Atualização de status em **tempo real via WebSocket (Socket.IO)**.
+- Pop-up com informações de APN.
+- Botão para limpar histórico e iniciar novo envio.
+
+---
+
+## 🛠️ Tecnologias utilizadas
+
+### Front-end
+- **HTML5** → estrutura da aplicação  
+- **CSS3** → estilização e animações  
+- **JavaScript (Vanilla JS)** → lógica de envio e manipulação do DOM  
+- **Fetch API** → requisições HTTP para o backend  
+- **Socket.IO (cliente)** → atualização em tempo real dos status  
+
+### Back-end
+- **Node.js** → ambiente de execução  
+- **Express.js** → criação de rotas e API REST  
+- **Twilio SDK** → envio de SMS e recebimento de status  
+- **Socket.IO (servidor)** → comunicação em tempo real com o front-end  
+- **body-parser** → tratamento de requisições JSON  
+- **CORS** → habilitar acesso entre origens diferentes  
+- **Ngrok** → expor servidor local para receber callbacks da Twilio  
+
+---
+
+## 📡 Fluxo da aplicação
+1. Usuário envia SMS pelo formulário no navegador.  
+2. Front-end faz requisição `POST /send-sms` para o backend.  
+3. Backend usa Twilio para enviar o SMS e retorna status inicial ("queued").  
+4. Twilio processa o envio e chama o webhook `/sms-status`.  
+5. Backend recebe atualização e emite evento via Socket.IO.  
+6. Front-end atualiza o histórico em tempo real.  
+7. Usuário visualiza status atualizado com indicador colorido.  
+
+---
 
 
---
-🎨 Front-end
-HTML5 → estrutura da página.
-
-CSS3 → estilização (layout dividido, tela de loading, pop-up, botões com hover, indicadores de status).
-
-JavaScript (Vanilla JS) → lógica da aplicação (envio de SMS, manipulação do DOM, abertura/fechamento de pop-up, histórico).
-
-Socket.IO (cliente) → comunicação em tempo real com o servidor para atualizar status dos SMS.
-
-Fetch API → envio de requisições HTTP para o backend (POST /send-sms).
-
-
---
-
-⚙️ Back-end
-Node.js → ambiente de execução.
-
-Express.js → framework para criar rotas e gerenciar requisições HTTP.
-
-body-parser → interpretar JSON e dados de formulários.
-
-CORS → permitir requisições de origens diferentes (necessário para o front acessar o backend).
-
-Twilio SDK → integração com o serviço de SMS (envio e recebimento de status).
-
-http (nativo do Node) → criação do servidor base.
-
-Socket.IO (servidor) → emissão de eventos em tempo real para o front-end.
-
-Ngrok → expor o servidor local para a internet e receber callbacks da Twilio.
